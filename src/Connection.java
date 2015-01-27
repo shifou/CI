@@ -5,19 +5,21 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Map;
-
+import java.util.concurrent.ConcurrentLinkedQueue;
 public class Connection implements Runnable {
 	private Socket socket;
+	ConcurrentLinkedQueue messageQueue;
 	private volatile boolean running;
 	private ObjectInputStream objInput;
 	private ObjectOutputStream objOutput;
-	public Connection(Socket slaveSocket, Map receRules) throws IOException {
+	public Connection(Socket slaveSocket, ConcurrentLinkedQueue mq) throws IOException {
 		// TODO Auto-generated constructor stub
 		socket = slaveSocket;
 		objOutput = new ObjectOutputStream(slaveSocket.getOutputStream());
 		objOutput.flush();
 		objInput = new ObjectInputStream(slaveSocket.getInputStream());
 		running=true;
+		messageQueue=mq;
 	}
 	public void run() {
 		try {
@@ -26,6 +28,7 @@ public class Connection implements Runnable {
 				try {
 
 					receiveMessage = (Message) objInput.readObject();
+					messageQueue.offer(receiveMessage);
 					
 				} catch (ClassNotFoundException e) {
 					//System.out.println("read disconnected message");
@@ -40,10 +43,6 @@ public class Connection implements Runnable {
 				{
 					//System.out.println("-----");
 					continue;
-				}
-				switch (receiveMessage.getKind()) {
-				case "LookUp":
-					break;
 				}
 			}
 		}catch (Exception e) {

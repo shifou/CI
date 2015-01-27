@@ -4,6 +4,7 @@ import java.net.Socket;
 import java.net.ServerSocket;
 import java.net.SocketException;
 import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 
@@ -13,9 +14,10 @@ public class User implements Runnable{
 	int port;
 	String name;
 	private volatile boolean running;
-	public Map receRules;
-	public User(String name,int port, Map receRules)
+	public ConcurrentLinkedQueue messageQueue;
+	public User(String name,int port,ConcurrentLinkedQueue messageRec)
 	{
+		messageQueue=messageRec;
 		this.name=name;
 		running = true;
         try {
@@ -38,7 +40,7 @@ public class User implements Runnable{
         	 try{
              slaveSocket = serverSocket.accept();
              Connection handler;
-             handler = new Connection(slaveSocket,receRules);
+             handler = new Connection(slaveSocket,messageQueue);
 				new Thread(handler).start();
 	           // System.out.println("begin send");
 	            /*
