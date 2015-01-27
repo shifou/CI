@@ -36,5 +36,10 @@ public class Message implements Serializable{
 	{
 		return src+" to "+des+" "+seq+" act: "+action+" "+kind+" dup: "+duplicate+" "+data; 
 	}
+
+	public String getKind() {
+		// TODO Auto-generated method stub
+		return kind;
+	}
 	
 }
