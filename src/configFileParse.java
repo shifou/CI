@@ -1,42 +1,42 @@
 
 import java.io.*;
 import java.util.*;
-import java.lang.*;
+//import java.lang.*;
 import org.yaml.snakeyaml.Yaml;
 
 public class configFileParse {
 		
-		private List<LinkedHashMap<String ,String>> NodeInfo;
-		private ArrayList<LinkedHashMap<String,String>> sendRules;
-		private ArrayList<LinkedHashMap<String,String>> recvRules;
+		private List<LinkedHashMap<String ,Object>> NodeInfo;
+		private ArrayList<LinkedHashMap<String,Object>> sendRules;
+		private ArrayList<LinkedHashMap<String,Object>> recvRules;
 		public configFileParse(String configFile) throws FileNotFoundException {
 			  
-			    NodeInfo = new ArrayList<LinkedHashMap<String,String>>();
-			    sendRules = new ArrayList<LinkedHashMap<String,String>>();
-			    recvRules = new ArrayList<LinkedHashMap<String,String>>();
+			    NodeInfo = new ArrayList<LinkedHashMap<String,Object>>();
+			    sendRules = new ArrayList<LinkedHashMap<String,Object>>();
+			    recvRules = new ArrayList<LinkedHashMap<String,Object>>();
 			    InputStream input = new FileInputStream(new File(configFile));
 			    Yaml yaml = new Yaml();
 			    HashMap data = (HashMap)yaml.load(input);
 			    
-			    for(LinkedHashMap<String, String> p :(ArrayList<LinkedHashMap<String, String>>)data.get("configuration"))
+			    for(LinkedHashMap<String, Object> p :(ArrayList<LinkedHashMap<String, Object>>)data.get("configuration"))
 			    {
-			    	LinkedHashMap<String, String> tmp = new LinkedHashMap<String, String>();
+			    	LinkedHashMap<String, Object> tmp = new LinkedHashMap<String, Object>();
 			    	tmp.putAll(p);
 			    	NodeInfo.add(tmp);
 			    }
 			    
-			    for(LinkedHashMap<String, String> p :(ArrayList<LinkedHashMap<String, String>>)data.get("sendRules"))
+			    for(LinkedHashMap<String, Object> p :(ArrayList<LinkedHashMap<String, Object>>)data.get("sendRules"))
 			    {
-			    	LinkedHashMap<String, String> tmp = new LinkedHashMap<String, String>();
+			    	LinkedHashMap<String, Object> tmp = new LinkedHashMap<String, Object>();
 			    	tmp.putAll(p);
 			    	sendRules.add(tmp);	    	
 			    	
 			    }
 			   
 			    
-			    for(LinkedHashMap<String, String> p :(ArrayList<LinkedHashMap<String, String>>)data.get("receiveRules"))
+			    for(LinkedHashMap<String, Object> p :(ArrayList<LinkedHashMap<String, Object>>)data.get("receiveRules"))
 			    {
-			    	LinkedHashMap<String, String> tmp = new LinkedHashMap<String, String>();
+			    	LinkedHashMap<String, Object> tmp = new LinkedHashMap<String, Object>();
 			    	tmp.putAll(p);
 			    	recvRules.add(tmp);	    	
 			    	
@@ -44,14 +44,14 @@ public class configFileParse {
 			   
 			  
 			}
-			public List<LinkedHashMap<String, String>> get_config()
+			public List<LinkedHashMap<String, Object>> get_config()
 			{
 				return NodeInfo;
 			}
 			
-			public LinkedHashMap<String, String> findByName(String name)
+			public LinkedHashMap<String, Object> findByName(String name)
 			{
-				for(LinkedHashMap<String, String> t : NodeInfo)
+				for(LinkedHashMap<String, Object> t : NodeInfo)
 				{
 					if(name.equals(t.get("name")))
 					{
@@ -60,16 +60,96 @@ public class configFileParse {
 				}
 				return null;
 			}
-			
+
+			public int getPortbyName(String name)
+			{	
+				for(LinkedHashMap<String, Object> t : NodeInfo)
+				{
+					
+					if(name.equals(t.get("name")))
+					{
+						if(t.get("port") != null)
+						{
+							return ((Integer)t.get("port")).intValue();
+						}
+					}
+				}
+
+				return -1;
+			}
+
+			public boolean itemExist(String item, LinkedHashMap<String, Object> t)
+			{
+				if(t.get(item) == null)
+				{
+					return false;
+				}else{
+					return true;
+				}
+			}
+
 			public String sendRule(Message sendMsg)
 			{
 				
+				for(LinkedHashMap<String, Object> t : sendRules)
+				{
+					boolean targetRule = true;
+					if(itemExist("seqNum",t))
+					{
+						if(((Integer)t.get("seqNum")).intValue() == sendMsg.seq)
+						{
+							targetRule = (targetRule && true);
+						}else{
+							continue;
+						}
+					}
+
+					if(itemExist("dest",t))
+					{
+						if(((String)t.get("dest")).equals(sendMsg.des))
+						{
+							targetRule = (targetRule && true);
+						}else{
+							continue;
+						}
+					}
+
+					if(itemExist("src",t))
+					{
+						if(((String)t.get("src")).equals(sendMsg.src))
+						{
+							targetRule = (targetRule && true);
+						}else{
+							continue;
+						}
+					}
+					if(itemExist("kind",t))
+					{
+						if(((String)t.get("kind")).equals(sendMsg.kind))
+						{
+							targetRule = (targetRule && true);
+						}else{
+							continue;
+						}
+					}
+					if(targetRule == true)
+					{
+						return ((String)t.get("action"));
+					}
+					
+				}
+				return null;   // no rule need to apply on this message
 			}
+			
+			
+			
 			
 			public static void main(String[] arg) throws FileNotFoundException{
 				configFileParse a = new configFileParse("/Users/Moon/Desktop/example.yaml");
-				
-					System.out.println(a.find_userinfo("p"));
+				Message t = new Message("alice","Ack",null);
+				t.set_seqNum(4);
+				t.set_src("bob");
+				System.out.println(a.sendRule(t));
 			}   
 
 }
