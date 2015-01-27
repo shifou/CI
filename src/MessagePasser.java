@@ -1,6 +1,7 @@
+import java.net.Socket;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.yaml.snakeyaml.Yaml;
 
 public class MessagePasser {
 
@@ -8,6 +9,7 @@ public class MessagePasser {
 	public User user;
 	public configFileParse config;
 	public int port;
+	public HashMap<String, nodeInfo> nodes = new HashMap<String, nodeInfo>();
 	ConcurrentLinkedQueue<Message> messageRec = new ConcurrentLinkedQueue<Message>();
 	public MessagePasser(String configuration_filename, String local_name) {
 		config = new configFileParse(configuration_filename);
@@ -18,6 +20,7 @@ public class MessagePasser {
 			System.out.println("can not find the user info in config");
 			return;
 		}
+		nodes= config.getNetMap(username);
 		user = new User(username, port,messageRec);
 	}
 

@@ -2,7 +2,7 @@ import java.io.Serializable;
 
 public class Message implements Serializable{
 	
-
+	String hostname;
 	String src;
 	String des;
 	String kind;
@@ -11,12 +11,15 @@ public class Message implements Serializable{
 	boolean duplicate = false;
 	int seq;
 	
-	public Message(String dest, String kind, String data){
+	public Message(String hostname,String dest, String kind, String data){
+		this.hostname=hostname;
 		des = dest;
 		this.kind = kind;
 		this.data = data;
 	}
-	
+	public void set_hostname(String name){
+		this.hostname = name;
+	}
 	public void set_src(String source){
 		this.src = source;
 	}
