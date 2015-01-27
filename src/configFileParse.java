@@ -141,15 +141,66 @@ public class configFileParse {
 				return null;   // no rule need to apply on this message
 			}
 			
-			
+			public String recvRule(Message recvMsg)
+			{
+				
+				for(LinkedHashMap<String, Object> t : recvRules)
+				{
+					boolean targetRule = true;
+					if(itemExist("seqNum",t))
+					{
+						if(((Integer)t.get("seqNum")).intValue() == recvMsg.seq)
+						{
+							targetRule = (targetRule && true);
+						}else{
+							continue;
+						}
+					}
+
+					if(itemExist("dest",t))
+					{
+						if(((String)t.get("dest")).equals(recvMsg.des))
+						{
+							targetRule = (targetRule && true);
+						}else{
+							continue;
+						}
+					}
+
+					if(itemExist("src",t))
+					{
+						if(((String)t.get("src")).equals(recvMsg.src))
+						{
+							targetRule = (targetRule && true);
+						}else{
+							continue;
+						}
+					}
+					if(itemExist("kind",t))
+					{
+						if(((String)t.get("kind")).equals(recvMsg.kind))
+						{
+							targetRule = (targetRule && true);
+						}else{
+							continue;
+						}
+					}
+					if(targetRule == true)
+					{
+						return ((String)t.get("action"));
+					}
+					
+				}
+				return null;   // no rule need to apply on this message
+			}
 			
 			
 			public static void main(String[] arg) throws FileNotFoundException{
 				configFileParse a = new configFileParse("/Users/Moon/Desktop/example.yaml");
-				Message t = new Message("alice","Ack",null);
-				t.set_seqNum(4);
-				t.set_src("bob");
-				System.out.println(a.sendRule(t));
+				Message t = new Message("alice","alice","Ack",null);
+				t.set_seqNum(5);
+				t.set_src("charlie");
+				System.out.println(a.recvRule(t));
 			}   
 
 }
