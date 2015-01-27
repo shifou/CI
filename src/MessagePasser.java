@@ -10,7 +10,8 @@ public class MessagePasser {
 	public configFileParse config;
 	public int port;
 	public HashMap<String, nodeInfo> nodes = new HashMap<String, nodeInfo>();
-	ConcurrentLinkedQueue<Message> messageRec = new ConcurrentLinkedQueue<Message>();
+	public ConcurrentLinkedQueue<Message> messageRec = new ConcurrentLinkedQueue<Message>();
+	public HashMap<String, Socket> sockets = new HashMap<String, Socket>();
 	public MessagePasser(String configuration_filename, String local_name) {
 		config = new configFileParse(configuration_filename);
 		username = local_name;
@@ -21,10 +22,22 @@ public class MessagePasser {
 			return;
 		}
 		nodes= config.getNetMap(username);
+		sockets = getSocketMap(nodes);
 		user = new User(username, port,messageRec);
+	}
+	
+	private HashMap<String, Socket> getSocketMap(
+			HashMap<String, nodeInfo> nodes2) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	void send(Message message) {
+		if(this.nodes.containsKey(message.des)==false)
+		{
+			System.out.println("can not find this node information in the config");
+			return;
+		}
 		String action = config.checkSendRule(message);
 		switch(message.action){
 		case "drop":
