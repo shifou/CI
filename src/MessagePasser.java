@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MessagePasser {
 
+
 	public String username;
 	public User user;
 	public configFileParse config;
@@ -73,3 +74,4 @@ public class MessagePasser {
 		}
 	}
 }
+
