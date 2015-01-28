@@ -1,5 +1,5 @@
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -22,7 +22,7 @@ public class MessagePasser {
 	public ConcurrentLinkedQueue<Message> delaySend = new ConcurrentLinkedQueue<Message>();
 	public ConcurrentLinkedQueue<Message> delayRec = new ConcurrentLinkedQueue<Message>();
 	public ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<Message>();
-	public MessagePasser(String configuration_filename, String local_name) {
+	public MessagePasser(String configuration_filename, String local_name) throws FileNotFoundException {
 		config = new configFileParse(configuration_filename);
 		filename = configuration_filename;
 		username = local_name;
@@ -58,7 +58,7 @@ public class MessagePasser {
 		}
 		return ans;
 	}
-	private void reconfig() {
+	private void reconfig() throws FileNotFoundException {
 		// TODO Auto-generated method stub
 		config = new configFileParse(filename);
 		port = config.getPortbyName(username);
@@ -72,28 +72,28 @@ public class MessagePasser {
 		user = new User(username, port,messageRec);
 	}
 
-	void send(Message mes) {
+	void send(Message mes) throws FileNotFoundException {
 		reconfig();
 		if(this.nodes.containsKey(mes.des)==false)
 		{
 			System.out.println("can not find this node information in the config");
 			return;
 		}
-		String action = config.checkSendRule(mes);
+		mes.action = config.sendRule(mes);
 		switch(mes.action){
-		case "drop":
-			break;
-		case "duplicate":
-			sendMessage(mes);
-			mes.set_duplicate();
-			sendMessage(mes);
-			break;
-		case "delay":
-			delaySend.offer(mes);
-			break;
-		default:
-			sendMessage(mes);
-			break;
+			case "drop":
+				break;
+			case "duplicate":
+				sendMessage(mes);
+				mes.set_duplicate();
+				sendMessage(mes);
+				break;
+			case "delay":
+				delaySend.offer(mes);
+				break;
+			default:
+				sendMessage(mes);
+				break;
 		}
 	}
 
@@ -125,7 +125,7 @@ public class MessagePasser {
 		
 	}
 
-	Message receive() {
+	Message receive() throws FileNotFoundException {
 		reconfig();
 
 		receiveMessage();
@@ -144,7 +144,7 @@ public class MessagePasser {
 		Message mes;
 		if(!messages.isEmpty()){
 			mes = messageRec.poll();
-			String action = this.config.checkReceivingRules(mes);
+			String action = this.config.recvRule(mes);
 			switch(action){
 			case "drop":
 				break;

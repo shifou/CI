@@ -11,6 +11,7 @@ public class configFileParse {
 		private ArrayList<LinkedHashMap<String,Object>> sendRules;
 		private ArrayList<LinkedHashMap<String,Object>> recvRules;
 		
+		@SuppressWarnings("unchecked")
 		public configFileParse(String configFile) throws FileNotFoundException {
 			  
 			    NodeInfo = new ArrayList<LinkedHashMap<String,Object>>();
@@ -18,7 +19,7 @@ public class configFileParse {
 			    recvRules = new ArrayList<LinkedHashMap<String,Object>>();
 			    InputStream input = new FileInputStream(new File(configFile));
 			    Yaml yaml = new Yaml();
-			    HashMap data = (HashMap)yaml.load(input);
+			    LinkedHashMap<String,Object> data = (LinkedHashMap<String, Object>)yaml.load(input);
 			    
 			    for(LinkedHashMap<String, Object> p :(ArrayList<LinkedHashMap<String, Object>>)data.get("configuration"))
 			    {
