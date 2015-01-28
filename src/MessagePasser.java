@@ -140,15 +140,11 @@ public class MessagePasser {
 
 	private void receiveMessage() {
 		Message mes;
-		//System.out.println("Receiving..................");
 		if(!messages.isEmpty()){
 			mes = messageRec.poll();
 			String action = this.config.checkReceivingRules(mes);
 			switch(action){
 			case "drop":
-				//System.out.println("receive: drop");
-				//do nothing, just drop it
-				//System.out.println("receive: drop");
 				break;
 			case "duplicate":
 				//System.out.println("receive: duplicate");
