@@ -11,7 +11,9 @@ public class Manager {
 		while(true){
 			System.out.println("Enter the command you want to execute: send or receive");
 			String cm = in.readLine();
-			String dest, kind, data;	
+			String dest = new String();
+			String kind = new String();
+			String data = new String();	
 			switch(cm){
 				case "send":
 					
