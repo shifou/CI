@@ -12,7 +12,7 @@ public class Message implements Serializable{
 	int seq;
 	
 	public Message(String hostname,String dest, String kind, String data){
-		this.hostname=hostname;
+		this.hostname=src=hostname;
 		des = dest;
 		this.kind = kind;
 		this.data = data;
