@@ -15,18 +15,18 @@ public class MessagePasser {
 	public MessagePasser(String configuration_filename, String local_name) {
 		config = new configFileParse(configuration_filename);
 		username = local_name;
-		port = config.getByport(username);
+		port = config.getPortbyName(username);
 		if(port==-1)
 		{
 			System.out.println("can not find the user info in config");
 			return;
 		}
-		nodes= config.getNetMap(username);
+		nodes= config.getNetMap(username); // TODO: return a hashmap<username, nodeinfo> which contains info other than the current username
 		user = new User(username, port,messageRec);
 	}
 
 	void send(Message message) {
-		String action = config.checkSendRule(message);
+		String action = config.sendRule(message);
 		switch(message.action){
 		case "drop":
 			break;
@@ -47,7 +47,7 @@ public class MessagePasser {
 		Message message;
 		if(!messageRec.isEmpty()){
 			message = messageRec.poll();
-		String action = config.checkSendRule(message);
+		String action = config.sendRule(message);
 		switch(message.action){
 		case "drop":
 			break;

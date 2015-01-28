@@ -44,6 +44,7 @@ public class configFileParse {
 			   
 			  
 			}
+		
 			public List<LinkedHashMap<String, Object>> get_config()
 			{
 				return NodeInfo;
@@ -77,7 +78,9 @@ public class configFileParse {
 
 				return -1;
 			}
-
+			public LinkedHashMap<String, nodeInfo> getNetMap(){
+				
+			}
 			public boolean itemExist(String item, LinkedHashMap<String, Object> t)
 			{
 				if(t.get(item) == null)
@@ -87,7 +90,7 @@ public class configFileParse {
 					return true;
 				}
 			}
-
+			
 			public String sendRule(Message sendMsg)
 			{
 				
