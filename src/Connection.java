@@ -27,7 +27,7 @@ public class Connection implements Runnable {
 			while (running) {
 				try {
 					mes = (Message) objInput.readObject();
-					System.out.println("rec: "+mes.toString());
+					//System.out.println("rec: "+mes.toString());
 					
 					messageQueue.offer(mes);
 					
