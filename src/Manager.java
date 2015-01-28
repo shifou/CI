@@ -15,13 +15,13 @@ public class Manager {
 			
 			switch(hold[0]){
 				case "send":
-					if(hold.length!=4)
+					if(hold.length!=5)
 					{
 						System.err.println("wrong send command!\n");
-						System.out.println("usage: send#bob#ack#what is your name");
+						System.out.println("usage: send#bob#Action#kind#what is your name");
 						break;
 					}
-					Message message = new Message(args[1],hold[1],hold[2], hold[3]);
+					Message message = new Message(args[1],hold[1],hold[2], hold[3],hold[4]);
 					message.set_seqNum(seq++);
 					messagePasser.send(message);
 					break;

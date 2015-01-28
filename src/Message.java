@@ -11,9 +11,10 @@ public class Message implements Serializable{
 	boolean duplicate = false;
 	int seq;
 	
-	public Message(String hostname,String dest, String kind, String data){
+	public Message(String hostname,String dest, String action, String kind, String data){
 		this.hostname=src=hostname;
 		des = dest;
+		this.action=action;
 		this.kind = kind;
 		this.data = data;
 	}

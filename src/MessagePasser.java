@@ -35,6 +35,7 @@ public class MessagePasser {
 		nodes= config.getNetMap(username);
 		//sockets = getSocketMap(nodes);
 		user = new User(username, port,messageRec);
+		new Thread(user).start();
 	}
 	
 	private HashMap<String, Socket> getSocketMap(
@@ -69,21 +70,21 @@ public class MessagePasser {
 			return;
 		}
 		nodes= config.getNetMap(username);
-		System.out.println(nodes);
+		//System.out.println(nodes);
 		//sockets = getSocketMap(nodes);
 		//user = new User(username, port,messageRec);
 	}
 
 	void send(Message mes) throws FileNotFoundException {
 		reconfig();
-		System.out.println(mes.des);
+		//System.out.println(mes.des);
 		if(this.nodes.containsKey(mes.des)==false)
 		{
 			System.out.println("can not find this node information in the config");
 			return;
 		}
 		String hold = config.sendRule(mes);
-		System.out.println(hold+"-----");
+		//System.out.println(hold+"-----");
 		switch(hold){
 			case "drop":
 				break;
@@ -106,6 +107,7 @@ public class MessagePasser {
 		// TODO Auto-generated method stub
 		if(this.sockets.containsKey(mes.des)==false)
 		{
+			System.out.println("add socket");
 			nodeInfo hold= nodes.get(mes.des);
 			try {
 				//System.out.println(hold.ip+"\t"+hold.port);
@@ -118,7 +120,7 @@ public class MessagePasser {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			return;
+			
 		}
 		try{
 		Socket hold = sockets.get(mes.des);
@@ -149,7 +151,7 @@ public class MessagePasser {
 			return mes;
 		}
 		else{
-			return new Message(null,null, null, "no message received");
+			return new Message(null,null, null, null,"no message received");
 		}
 		
 		

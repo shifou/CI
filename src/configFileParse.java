@@ -110,7 +110,7 @@ public class configFileParse {
 			
 			public String sendRule(Message sendMsg)
 			{
-				System.out.println(sendMsg.toString());
+				//System.out.println(sendMsg.toString());
 				for(LinkedHashMap<String, Object> t : sendRules)
 				{
 					boolean targetRule = true;
@@ -164,7 +164,7 @@ public class configFileParse {
 			
 			public String recvRule(Message recvMsg)
 			{
-				System.out.println(recvMsg.toString());
+				//System.out.println(recvMsg.toString());
 				for(LinkedHashMap<String, Object> t : recvRules)
 				{
 					boolean targetRule = true;
@@ -218,7 +218,7 @@ public class configFileParse {
 			
 			public static void main(String[] arg) throws FileNotFoundException{
 				configFileParse a = new configFileParse("/Users/Moon/Desktop/example.yaml");
-				Message t = new Message("alice","alice","Ack",null);
+				Message t = new Message("alice","alice","Ack","kind",null);
 				t.set_seqNum(5);
 				t.set_src("charlie");
 				System.out.println(a.recvRule(t));

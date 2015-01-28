@@ -23,12 +23,13 @@ public class Connection implements Runnable {
 	}
 	public void run() {
 		try {
-			Message receiveMessage;
+			Message mes;
 			while (running) {
 				try {
-
-					receiveMessage = (Message) objInput.readObject();
-					messageQueue.offer(receiveMessage);
+					mes = (Message) objInput.readObject();
+					System.out.println("rec: "+mes.toString());
+					
+					messageQueue.offer(mes);
 					
 				} catch (ClassNotFoundException e) {
 					//System.out.println("read disconnected message");
