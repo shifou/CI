@@ -29,6 +29,10 @@ public class User implements Runnable{
      }
         System.out.println("start User "+name+" at: "+port);
 	}
+	public void shutdown()
+	{
+		running=false;
+	}
 
 	@Override
 	public void run() {
