@@ -9,17 +9,23 @@ public class Manager {
 		MessagePasser messagePasser = new MessagePasser(args[0], args[1]);
 		int seq=1;
 		while(true){
-			System.out.println("Enter the command you want to execute: send or receive");
+			System.out.println("Enter the command you want to execute: send or rec");
 			String cm = in.readLine();
+			String[] hold = cm.split("#");
 			String dest, kind, data;	
-			switch(cm){
+			switch(hold[0]){
 				case "send":
-					
-					Message message = new Message(args[1],dest,kind, data);
+					if(hold.length!=4)
+					{
+						System.err.println("wrong send command!\n");
+						System.out.println("usage: send#bob#ack#what is your name");
+						break;
+					}
+					Message message = new Message(args[1],hold[1],hold[2], hold[3]);
 					message.set_seqNum(seq++);
 					messagePasser.send(message);
 					break;
-				case "receive":
+				case "rec":
 					System.out.println(messagePasser.receive().toString());
 					break;
 				default:
