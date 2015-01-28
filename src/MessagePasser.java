@@ -12,6 +12,7 @@ public class MessagePasser {
 
 
 	public String username;
+	public String filename;
 	public User user;
 	public configFileParse config;
 	public int port;
@@ -23,6 +24,7 @@ public class MessagePasser {
 	public ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<Message>();
 	public MessagePasser(String configuration_filename, String local_name) {
 		config = new configFileParse(configuration_filename);
+		filename = configuration_filename;
 		username = local_name;
 		port = config.getPortbyName(username);
 		if(port==-1)
@@ -58,7 +60,7 @@ public class MessagePasser {
 	}
 	private void reconfig() {
 		// TODO Auto-generated method stub
-		config = new configFileParse(configuration_filename);
+		config = new configFileParse(filename);
 		port = config.getPortbyName(username);
 		if(port==-1)
 		{
