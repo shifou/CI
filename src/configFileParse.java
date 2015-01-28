@@ -110,7 +110,7 @@ public class configFileParse {
 			
 			public String sendRule(Message sendMsg)
 			{
-				
+				System.out.println(sendMsg.toString());
 				for(LinkedHashMap<String, Object> t : sendRules)
 				{
 					boolean targetRule = true;
@@ -152,18 +152,19 @@ public class configFileParse {
 							continue;
 						}
 					}
+					System.out.println(targetRule);
 					if(targetRule == true)
 					{
 						return ((String)t.get("action"));
 					}
 					
 				}
-				return null;   // no rule need to apply on this message
+				return sendMsg.action;   // no rule need to apply on this message
 			}
 			
 			public String recvRule(Message recvMsg)
 			{
-				
+				System.out.println(recvMsg.toString());
 				for(LinkedHashMap<String, Object> t : recvRules)
 				{
 					boolean targetRule = true;
@@ -211,7 +212,7 @@ public class configFileParse {
 					}
 					
 				}
-				return null;   // no rule need to apply on this message
+				return recvMsg.action;   // no rule need to apply on this message
 			}
 			
 			

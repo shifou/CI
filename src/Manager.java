@@ -12,7 +12,7 @@ public class Manager {
 			System.out.println("Enter the command you want to execute: send or rec");
 			String cm = in.readLine();
 			String[] hold = cm.split("#");
-			String dest, kind, data;	
+			
 			switch(hold[0]){
 				case "send":
 					if(hold.length!=4)
