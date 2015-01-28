@@ -33,7 +33,7 @@ public class MessagePasser {
 			return;
 		}
 		nodes= config.getNetMap(username);
-		sockets = getSocketMap(nodes);
+		//sockets = getSocketMap(nodes);
 		user = new User(username, port,messageRec);
 	}
 	
@@ -45,6 +45,7 @@ public class MessagePasser {
 		{
 			nodeInfo hold= nodes.get(each);
 			try {
+				//System.out.println(hold.ip+"\t"+hold.port);
 				Socket sendd = new Socket(hold.ip, hold.port);
 				ans.put(each, sendd);
 			} catch (UnknownHostException e) {
@@ -68,19 +69,22 @@ public class MessagePasser {
 			return;
 		}
 		nodes= config.getNetMap(username);
-		sockets = getSocketMap(nodes);
-		user = new User(username, port,messageRec);
+		System.out.println(nodes);
+		//sockets = getSocketMap(nodes);
+		//user = new User(username, port,messageRec);
 	}
 
 	void send(Message mes) throws FileNotFoundException {
 		reconfig();
+		System.out.println(mes.des);
 		if(this.nodes.containsKey(mes.des)==false)
 		{
 			System.out.println("can not find this node information in the config");
 			return;
 		}
-		mes.action = config.sendRule(mes);
-		switch(mes.action){
+		String hold = config.sendRule(mes);
+		System.out.println(hold+"-----");
+		switch(hold){
 			case "drop":
 				break;
 			case "duplicate":
@@ -102,7 +106,18 @@ public class MessagePasser {
 		// TODO Auto-generated method stub
 		if(this.sockets.containsKey(mes.des)==false)
 		{
-			System.out.println("can not find this node socket in the config");
+			nodeInfo hold= nodes.get(mes.des);
+			try {
+				//System.out.println(hold.ip+"\t"+hold.port);
+				Socket sendd = new Socket(hold.ip, hold.port);
+				sockets.put(mes.des, sendd);
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return;
 		}
 		try{

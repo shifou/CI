@@ -1,13 +1,13 @@
 configuration :
 - name : alice
-  ip   : 192.168.1.52
+  ip   : 127.0.0.1
   port : 12344
 - name : bob
-  ip   : 192.168.1.112
+  ip   : 127.0.0.1
   port : 14255
 - name : charlie
-  ip   : 128.2.130.19
-  port : 12998
+  ip   : 127.0.0.1
+  port : 12355
 
 sendRules :
   - action : drop 

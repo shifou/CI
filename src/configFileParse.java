@@ -75,7 +75,7 @@ public class configFileParse {
 				if(!username.equals(t.get("name")))
 				{
 					nodeInfo nod = new nodeInfo(((String)t.get("ip")),((Integer)t.get("port")).intValue());
-					tmp.put(username, nod);
+					tmp.put((String) t.get("name"), nod);
 				}
 			}
 			
