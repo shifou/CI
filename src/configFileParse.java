@@ -1,6 +1,7 @@
 
 import java.io.*;
 import java.util.*;
+
 //import java.lang.*;
 import org.yaml.snakeyaml.Yaml;
 
@@ -9,6 +10,7 @@ public class configFileParse {
 		private List<LinkedHashMap<String ,Object>> NodeInfo;
 		private ArrayList<LinkedHashMap<String,Object>> sendRules;
 		private ArrayList<LinkedHashMap<String,Object>> recvRules;
+		
 		public configFileParse(String configFile) throws FileNotFoundException {
 			  
 			    NodeInfo = new ArrayList<LinkedHashMap<String,Object>>();
@@ -24,6 +26,7 @@ public class configFileParse {
 			    	tmp.putAll(p);
 			    	NodeInfo.add(tmp);
 			    }
+			 
 			    
 			    for(LinkedHashMap<String, Object> p :(ArrayList<LinkedHashMap<String, Object>>)data.get("sendRules"))
 			    {
@@ -44,12 +47,14 @@ public class configFileParse {
 			   
 			  
 			}
-			public List<LinkedHashMap<String, Object>> get_config()
-			{
-				return NodeInfo;
-			}
 			
-			public LinkedHashMap<String, Object> findByName(String name)
+		
+		public List<LinkedHashMap<String, Object>> get_config()
+		{
+				return NodeInfo;
+		}
+			
+		public LinkedHashMap<String, Object> findByName(String name)
 			{
 				for(LinkedHashMap<String, Object> t : NodeInfo)
 				{
@@ -60,9 +65,23 @@ public class configFileParse {
 				}
 				return null;
 			}
-
-			public int getPortbyName(String name)
-			{	
+			
+		public LinkedHashMap<String, nodeInfo> getNetMap(String username)
+		{
+			LinkedHashMap<String,nodeInfo> tmp = new LinkedHashMap<String,nodeInfo>();
+			
+			for(LinkedHashMap<String, Object> t : NodeInfo){
+				if(!username.equals(t.get("name")))
+				{
+					nodeInfo nod = new nodeInfo(((String)t.get("ip")),((Integer)t.get("port")).intValue());
+					tmp.put(username, nod);
+				}
+			}
+			
+			return tmp;
+		}
+		public int getPortbyName(String name)
+		{	
 				for(LinkedHashMap<String, Object> t : NodeInfo)
 				{
 					
@@ -77,7 +96,7 @@ public class configFileParse {
 
 				return -1;
 			}
-
+			
 			public boolean itemExist(String item, LinkedHashMap<String, Object> t)
 			{
 				if(t.get(item) == null)
@@ -87,7 +106,7 @@ public class configFileParse {
 					return true;
 				}
 			}
-
+			
 			public String sendRule(Message sendMsg)
 			{
 				
