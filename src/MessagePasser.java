@@ -142,7 +142,7 @@ public class MessagePasser {
 
 	private void receiveMessage() {
 		Message mes;
-		if(!messages.isEmpty()){
+		if(!messageRec.isEmpty()){
 			mes = messageRec.poll();
 			String action = this.config.recvRule(mes);
 			switch(action){
