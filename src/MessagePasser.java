@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -16,6 +17,7 @@ public class MessagePasser {
 	public User user;
 	public configFileParse config;
 	public int port;
+	public long last;
 	public LinkedHashMap<String, nodeInfo> nodes = new LinkedHashMap<String, nodeInfo>();
 	public ConcurrentLinkedQueue<Message> messageRec = new ConcurrentLinkedQueue<Message>();
 	public HashMap<String, Socket> sockets = new HashMap<String, Socket>();
@@ -26,6 +28,8 @@ public class MessagePasser {
 	public MessagePasser(String configuration_filename, String local_name) throws FileNotFoundException {
 		config = new configFileParse(configuration_filename);
 		filename = configuration_filename;
+		File hold  = new File(filename);
+		last=hold.lastModified();
 		username = local_name;
 		port = config.getPortbyName(username);
 		if(port==-1)
@@ -63,6 +67,8 @@ public class MessagePasser {
 	}
 	private void reconfig() throws FileNotFoundException {
 		// TODO Auto-generated method stub
+		if(last<=new File(filename).lastModified())
+			 return;
 		config = new configFileParse(filename);
 		port = config.getPortbyName(username);
 		if(port==-1)
