@@ -19,6 +19,7 @@ public class MessagePasser {
 	public LinkedHashMap<String, nodeInfo> nodes = new LinkedHashMap<String, nodeInfo>();
 	public ConcurrentLinkedQueue<Message> messageRec = new ConcurrentLinkedQueue<Message>();
 	public HashMap<String, Socket> sockets = new HashMap<String, Socket>();
+	public HashMap<String, ObjectOutputStream> streams= new HashMap<String, ObjectOutputStream>();
 	public ConcurrentLinkedQueue<Message> delaySend = new ConcurrentLinkedQueue<Message>();
 	public ConcurrentLinkedQueue<Message> delayRec = new ConcurrentLinkedQueue<Message>();
 	public ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<Message>();
@@ -70,6 +71,8 @@ public class MessagePasser {
 			return;
 		}
 		nodes= config.getNetMap(username);
+		sockets.clear();
+		streams.clear();
 		//System.out.println(nodes);
 		//sockets = getSocketMap(nodes);
 		//user = new User(username, port,messageRec);
@@ -87,6 +90,7 @@ public class MessagePasser {
 		//System.out.println(hold+"-----");
 		switch(hold){
 			case "drop":
+				System.out.println("drop");
 				break;
 			case "duplicate":
 				sendMessage(mes);
@@ -94,9 +98,11 @@ public class MessagePasser {
 				sendMessage(mes);
 				break;
 			case "delay":
+				System.out.println("---");
 				delaySend.offer(mes);
 				break;
 			default:
+				System.out.println("send");
 				sendMessage(mes);
 				break;
 		}
@@ -110,9 +116,11 @@ public class MessagePasser {
 			System.out.println("add socket");
 			nodeInfo hold= nodes.get(mes.des);
 			try {
-				//System.out.println(hold.ip+"\t"+hold.port);
+				System.out.println(hold.ip+"\t"+hold.port);
 				Socket sendd = new Socket(hold.ip, hold.port);
+				ObjectOutputStream out=new ObjectOutputStream(sendd.getOutputStream());
 				sockets.put(mes.des, sendd);
+				streams.put(mes.des, out);
 			} catch (UnknownHostException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -123,12 +131,12 @@ public class MessagePasser {
 			
 		}
 		try{
-		Socket hold = sockets.get(mes.des);
-		ObjectOutputStream out;
-		out = new ObjectOutputStream(hold.getOutputStream());
+			System.out.println("des: "+mes.des);
+		ObjectOutputStream out= streams.get(mes.des);
 		out.writeObject(mes);
 		out.flush();
 		out.reset();
+		System.out.println("###"+delaySend.size());
 		while(!delaySend.isEmpty())
 		{
 			out.writeObject(delaySend.poll());

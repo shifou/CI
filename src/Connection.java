@@ -27,23 +27,22 @@ public class Connection implements Runnable {
 			while (running) {
 				try {
 					mes = (Message) objInput.readObject();
-					//System.out.println("rec: "+mes.toString());
+					//System.out.println("socket rec: "+mes.toString());
 					
 					messageQueue.offer(mes);
 					
 				} catch (ClassNotFoundException e) {
-					//System.out.println("read disconnected message");
+					System.out.println("read disconnected message");
 					continue;
 				}
 				catch(EOFException e)
 				{
-					//System.out.println("detect disconnected message");
+					System.out.println("detect disconnected message");
 					continue;
 				}
 				catch(Exception e)
 				{
-					//System.out.println("-----");
-					continue;
+					e.printStackTrace();
 				}
 			}
 		}catch (Exception e) {
