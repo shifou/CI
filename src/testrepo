@@ -1,0 +1,104 @@
+Test one Action at a time
+
+	Test case 1: From alice to bob 
+	test function: Action:”delay” using send rule 2
+
+	input:
+			send#bob#process#Lookup#alice to bob
+			send#bob#process#Ack#alice to bob
+			send#bob#process#Lookup#alice to bob
+			send#bob#process#Ack#alice to bob
+
+	Problem: 
+			Kinda pass the test case, but it will create a new socket after every delay (according to the output on the console)
+
+
+	
+	Test case 2: From charlie to bob
+
+	test function: Action:”duplicate” using send rule 3 and recv rule 1
+
+	input:
+			send#bob#process#Ack#alice to bob
+			send#bob#process#Ack#alice to bob
+
+	Passed
+
+
+	Test case 3: From bob to alice
+
+	test function: Action:”drop”, using send rule 1
+
+	input:
+			send#alice#process#Ack#bob to alice
+			send#alice#process#Ack#bob to alice
+			send#alice#process#Ack#bob to alice
+			send#alice#process#Ack#bob to alice(which is supposed to be dropped)
+			send#alice#process#Ack#bob to alice
+
+	Passed
+
+
+
+	Test case 4: From bob to alice
+
+	test function: Action:"delay in recv side", using recv rule 2
+
+	input:
+			{charlie}	send#alice#process#Ack#bob to alice		(be delayed on recv side)
+			{bob}		send#alice#process#Ack#bob to alice		(triger to process the delayed message)
+
+
+	Passed
+
+
+	
+	configFileParse.java can pass all test cases and return the right actions.
+
+
+
+Mixed test:
+
+
+	Test case 1: From bob to alice
+
+	test function: Action:”duplicate + drop”, using send rule 3 to duplicate and recv rule 1 to drop
+
+	input:
+			send#alice#process#Lookup#bob to alice		(which is supposed to be duplicated and then be dropped)
+			send#alice#process#Ack#bob to alice 		(won't be duplicated and dropped)
+	
+	passed
+
+
+	Test case 2: From charlie to bob
+
+	test function: Action:”duplicate + delay”, using send rule 3 to duplicate and recv rule 3 to delay
+
+	input:
+			send#bob#process#Ack#charlie to bob			(which is supposed to be duplicated and then be 											delayed)
+   {alice}  send#bob#process#Ack#alice to bob			(which is supposed to be dropped when receive and 													and causes the process of delayed 			     													message)
+
+
+
+   	passed
+
+
+	Test case 3: From alice to charlie
+
+	test function: Action:”delay + drop”, using send rule to delay and recv rule to drop
+
+	input:
+			send#charlie#process#Ack#alice to charlie 	(supposed to be delayed and then be dropped)
+			send#charlie#process#Lookup#alice to charlie	(supposed to be delayed but will not be dropped)
+			send#charlie#process#Ack#bob to charlie		(is used to triger peer to process the delayed message)
+
+	Failed, a little bit complicated, need to figure out why later.
+
+
+
+
+
+
+
+Other: after connection is terminated, the message "detect disconnected message”;

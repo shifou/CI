@@ -18,14 +18,33 @@ sendRules :
   - action : delay 
     kind   : Lookup
   - action : duplicate
+    src    : bob
+    dest   : alice
+    kind   : Lookup
+  - action : duplicate
     src    : charlie
     dest   : bob
     kind   : Ack
-
+  - action : delay
+    src    : alice
+    dest   : charlie
+    
 receiveRules :
+  - action : drop
+    src    : bob
+    dest   : alice
+    kind   : Lookup
   - action : duplicate      
     src    : charlie       
     seqNum : 3
   - action : delay
-    src    : bob
-    seqNum : 7
+    src    : charlie
+  - action : drop
+    src    : alice
+    dest   : bob
+    kind   : Ack
+  - action : drop
+    src    : alice
+    dest   : charlie
+    kind   : Ack
+

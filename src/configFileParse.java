@@ -152,7 +152,7 @@ public class configFileParse {
 							continue;
 						}
 					}
-					System.out.println(targetRule);
+					
 					if(targetRule == true)
 					{
 						return ((String)t.get("action"));
@@ -218,10 +218,11 @@ public class configFileParse {
 			
 			public static void main(String[] arg) throws FileNotFoundException{
 				configFileParse a = new configFileParse("/Users/Moon/Desktop/example.yaml");
-				Message t = new Message("alice","alice","Ack","kind",null);
-				t.set_seqNum(5);
+				Message t = new Message("alice","alice","process","Lookup",null);
+				t.set_seqNum(3);
 				t.set_src("charlie");
 				System.out.println(a.recvRule(t));
+				System.out.println(a.sendRule(t));
 			}   
 
 }
