@@ -143,14 +143,15 @@ public class MessagePasser {
 		out.flush();
 		out.reset();
 		System.out.println("###"+delaySend.size());
-		while(!delaySend.isEmpty())
-		{
-			sendMessage(delaySend.poll());
-		}
 		}catch(IOException e){
 			System.err.println("send fail");
 			return;
 		}
+		while(!delaySend.isEmpty())
+		{
+			sendMessage(delaySend.poll());
+		}
+		
 		
 	}
 
