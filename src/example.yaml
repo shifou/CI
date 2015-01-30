@@ -27,6 +27,10 @@ sendRules :
     src    : bob
     dest   : alice
     kind   : Lookup
+  - action : duplicate
+    src    : charlie
+    dest   : bob
+    kind   : Lookup
   - action : delay
     src    : alice
     dest   : charlie
@@ -44,10 +48,6 @@ receiveRules :
     src    : bob
     dest   : alice
     kind   : Lookup
-  - action : d
-    src    : charlie
-    dest   : bob
-    kind   : Ack  
   - action : drop
     src    : alice
     dest   : charlie

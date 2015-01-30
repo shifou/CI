@@ -9,8 +9,8 @@ Test one Action at a time
 			send#bob#process#Lookup#alice to bob
 			send#bob#process#Ack#alice to bob
 
-	Problem: 
-			Kinda pass the test case, but it will create a new socket after every delay (according to the output on the console)
+	Passed 
+			
 
 
 	
@@ -52,10 +52,6 @@ Test one Action at a time
 	Passed
 
 
-	
-	configFileParse.java can pass all test cases and return the right actions.
-
-
 
 Mixed test:
 
@@ -68,20 +64,20 @@ Mixed test:
 			send#alice#process#Lookup#bob to alice		(which is supposed to be duplicated and then be dropped)
 			send#alice#process#Ack#bob to alice 		(won't be duplicated and dropped)
 	
-	passed ???
+	Passed
 
 
 	Test case 2: From charlie to bob
 
-	test function: Action:”duplicate + delay”, using send rule 2 to duplicate and recv rule 3 to delay
+	test function: Action:”duplicate + delay”, using send rule 1 to duplicate and recv rule 3 to delay
 
 	input:
-			send#bob#process#Ack#charlie to bob			(which is supposed to be duplicated and then be 											delayed)
+			send#bob#process#Lookup#charlie to bob			(which is supposed to be duplicated and then be 											delayed)
    {alice}  send#bob#process#Ack#alice to bob			(which is supposed to be dropped when receive and 													and causes the process of delayed 			     													message)
 
 
 
-   	passed ???
+   	Passed
 
 
 	Test case 3: From alice to charlie
@@ -93,12 +89,5 @@ Mixed test:
 			send#charlie#process#Lookup#alice to charlie	(supposed to be delayed but will not be dropped)
 			send#bob#process#Ack#bob to charlie		(is used to triger peer to process the delayed message)
 
-	Failed, a little bit complicated, need to figure out why later.
+	Passed
 
-
-
-
-
-
-
-Other: after connection is terminated, the message "detect disconnected message”;
