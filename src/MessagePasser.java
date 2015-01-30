@@ -104,7 +104,7 @@ public class MessagePasser {
 				sendMessage(mes);
 				break;
 			case "delay":
-				System.out.println("---");
+				System.out.println("send delay");
 				delaySend.offer(mes);
 				break;
 			default:

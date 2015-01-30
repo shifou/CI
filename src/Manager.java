@@ -7,9 +7,9 @@ public class Manager {
 	public static void main(String[] args) throws IOException, InterruptedException{
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		MessagePasser messagePasser = new MessagePasser(args[0], args[1]);
-		int seq=1;
+		int seq=0;
 		while(true){
-			System.out.println("Enter the command you want to execute: send or rec");
+			System.out.println("Enter the command : send or rec");
 			String cm = in.readLine();
 			String[] hold = cm.split("#");
 			
