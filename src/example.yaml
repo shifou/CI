@@ -36,9 +36,12 @@ receiveRules :
     kind   : Lookup
   - action : duplicate      
     src    : charlie       
-    seqNum : 3
+    dest   : bob
+    kind   : Ack
   - action : delay
     src    : charlie
+    dest   : bob
+    kind   : Lookup
   - action : drop
     src    : alice
     dest   : bob
