@@ -119,7 +119,7 @@ public class MessagePasser {
 		// TODO Auto-generated method stub
 		if(this.sockets.containsKey(mes.des)==false)
 		{
-			System.out.println("add socket");
+			System.out.println("add "+mes.des+" to socket list");
 			nodeInfo hold= nodes.get(mes.des);
 			try {
 				System.out.println(hold.ip+"\t"+hold.port);
@@ -137,12 +137,12 @@ public class MessagePasser {
 			
 		}
 		try{
-			System.out.println("des: "+mes.des);
+			//System.out.println("des: "+mes.des);
 		ObjectOutputStream out= streams.get(mes.des);
 		out.writeObject(mes);
 		out.flush();
 		out.reset();
-		System.out.println("###"+delaySend.size());
+		//System.out.println("###"+delaySend.size());
 		}catch(IOException e){
 			System.err.println("send fail");
 			return;
