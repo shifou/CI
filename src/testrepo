@@ -16,7 +16,7 @@ Test one Action at a time
 	
 	Test case 2: From charlie to bob
 
-	test function: Action:”duplicate” using send rule 3 and recv rule 1
+	test function: Action:”duplicate” using send rule 3 and recv rule 2
 
 	input:
 			send#bob#process#Ack#alice to bob
@@ -40,7 +40,7 @@ Test one Action at a time
 
 
 
-	Test case 4: From bob to alice
+	Test case 4: From charlie to alice
 
 	test function: Action:"delay in recv side", using recv rule 2
 
