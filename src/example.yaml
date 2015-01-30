@@ -10,30 +10,28 @@ configuration :
   port : 12355
 
 sendRules :
-  - action : drop 
-    src    : bob
-    dest   : alice
-    kind   : Ack
-    seqNum : 4
   - action : delay 
-    kind   : Lookup
-  - action : duplicate
-    src    : bob
-    dest   : alice
+    src    : alice
+    dest   : bob
     kind   : Lookup
   - action : duplicate
     src    : charlie
     dest   : bob
     kind   : Ack
+  - action : drop 
+    src    : bob
+    dest   : alice
+    kind   : Ack
+    seqNum : 4
+  - action : duplicate
+    src    : bob
+    dest   : alice
+    kind   : Lookup
   - action : delay
     src    : alice
     dest   : charlie
     
 receiveRules :
-  - action : drop
-    src    : bob
-    dest   : alice
-    kind   : Lookup
   - action : duplicate      
     src    : charlie       
     dest   : bob
@@ -43,9 +41,13 @@ receiveRules :
     dest   : bob
     kind   : Lookup
   - action : drop
-    src    : alice
+    src    : bob
+    dest   : alice
+    kind   : Lookup
+  - action : d
+    src    : charlie
     dest   : bob
-    kind   : Ack
+    kind   : Ack  
   - action : drop
     src    : alice
     dest   : charlie
