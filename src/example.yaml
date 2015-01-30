@@ -1,9 +1,9 @@
 configuration :
 - name : alice
-  ip   : 127.0.0.1
+  ip   : 128.237.195.226
   port : 12344
 - name : bob
-  ip   : 127.0.0.1
+  ip   : 128.237.221.26
   port : 14255
 - name : charlie
   ip   : 127.0.0.1
