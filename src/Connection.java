@@ -33,12 +33,12 @@ public class Connection implements Runnable {
 					
 				} catch (ClassNotFoundException e) {
 					System.out.println("read disconnected message");
-					continue;
+					return;
 				}
 				catch(EOFException e)
 				{
 					System.out.println("detect disconnected message");
-					continue;
+					return;
 				}
 				catch(Exception e)
 				{
