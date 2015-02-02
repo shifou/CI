@@ -21,23 +21,33 @@ public class configFileParse {
 			    Yaml yaml = new Yaml();
 			    LinkedHashMap<String,Object> data = (LinkedHashMap<String, Object>)yaml.load(input);
 			    
-			    for(LinkedHashMap<String, Object> p :(ArrayList<LinkedHashMap<String, Object>>)data.get("configuration"))
-			    {
-			    	LinkedHashMap<String, Object> tmp = new LinkedHashMap<String, Object>();
-			    	tmp.putAll(p);
-			    	NodeInfo.add(tmp);
-			    }
-			 
+			    if(data.get("configuration") != null)
+				{
+				
+			    	for(LinkedHashMap<String, Object> p :(ArrayList<LinkedHashMap<String, Object>>)data.get("configuration"))
+			    	{
+			    		LinkedHashMap<String, Object> tmp = new LinkedHashMap<String, Object>();
+			    		tmp.putAll(p);
+			    		NodeInfo.add(tmp);
+			    	}
+				}
 			    
-			    for(LinkedHashMap<String, Object> p :(ArrayList<LinkedHashMap<String, Object>>)data.get("sendRules"))
-			    {
-			    	LinkedHashMap<String, Object> tmp = new LinkedHashMap<String, Object>();
-			    	tmp.putAll(p);
-			    	sendRules.add(tmp);	    	
+			    if(data.get("sendRules") != null)
+				{
+				
+			    	for(LinkedHashMap<String, Object> p :(ArrayList<LinkedHashMap<String, Object>>)data.get("sendRules"))
+			    	{
+			    		LinkedHashMap<String, Object> tmp = new LinkedHashMap<String, Object>();
+			    		tmp.putAll(p);
+			    		sendRules.add(tmp);	    	
 			    	
-			    }
+			    	}
+				}
 			   
-			    
+			    if(data.get("receiveRules") != null)
+				{
+					
+				
 			    for(LinkedHashMap<String, Object> p :(ArrayList<LinkedHashMap<String, Object>>)data.get("receiveRules"))
 			    {
 			    	LinkedHashMap<String, Object> tmp = new LinkedHashMap<String, Object>();
@@ -45,6 +55,7 @@ public class configFileParse {
 			    	recvRules.add(tmp);	    	
 			    	
 			    }
+				}
 			   
 			  
 			}
@@ -57,6 +68,10 @@ public class configFileParse {
 			
 		public LinkedHashMap<String, Object> findByName(String name)
 			{
+				if(NodeInfo.isEmpty())
+				{
+					return null;
+				}
 				for(LinkedHashMap<String, Object> t : NodeInfo)
 				{
 					if(name.equals(t.get("name")))
@@ -69,6 +84,10 @@ public class configFileParse {
 			
 		public LinkedHashMap<String, nodeInfo> getNetMap(String username)
 		{
+			if(NodeInfo.isEmpty())
+			{
+				return null;
+			}
 			LinkedHashMap<String,nodeInfo> tmp = new LinkedHashMap<String,nodeInfo>();
 			
 			for(LinkedHashMap<String, Object> t : NodeInfo){
@@ -83,7 +102,12 @@ public class configFileParse {
 		}
 		public int getPortbyName(String name)
 		{	
-				for(LinkedHashMap<String, Object> t : NodeInfo)
+			if(NodeInfo.isEmpty())
+			{
+				return -1;
+			}
+			
+			for(LinkedHashMap<String, Object> t : NodeInfo)
 				{
 					
 					if(name.equals(t.get("name")))
@@ -111,6 +135,10 @@ public class configFileParse {
 			public String sendRule(Message sendMsg)
 			{
 				//System.out.println(sendMsg.toString());
+				if(sendRules.isEmpty())
+				{
+					return sendMsg.action;
+				}
 				for(LinkedHashMap<String, Object> t : sendRules)
 				{
 					boolean targetRule = true;
@@ -152,6 +180,15 @@ public class configFileParse {
 							continue;
 						}
 					}
+					if(itemExist("duplicate",t))
+					{
+						if(((boolean)t.get("duplicate")) && sendMsg.duplicate)
+						{
+							targetRule = (targetRule && true);
+						}else{
+							continue;
+						}
+					}
 					
 					if(targetRule == true)
 					{
@@ -165,6 +202,10 @@ public class configFileParse {
 			public String recvRule(Message recvMsg)
 			{
 				//System.out.println(recvMsg.toString());
+				if(recvRules.isEmpty())
+				{
+					return recvMsg.action;
+				}
 				for(LinkedHashMap<String, Object> t : recvRules)
 				{
 					boolean targetRule = true;
@@ -200,6 +241,15 @@ public class configFileParse {
 					if(itemExist("kind",t))
 					{
 						if(((String)t.get("kind")).equals(recvMsg.kind))
+						{
+							targetRule = (targetRule && true);
+						}else{
+							continue;
+						}
+					}
+					if(itemExist("duplicate",t))
+					{
+						if(((boolean)t.get("duplicate")) == recvMsg.duplicate)
 						{
 							targetRule = (targetRule && true);
 						}else{

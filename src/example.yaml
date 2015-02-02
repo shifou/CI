@@ -1,55 +1,59 @@
 configuration :
 - name : alice
-  ip   : 128.237.195.226
+  ip   : 128.237.207.189
   port : 12344
 - name : bob
-  ip   : 128.237.221.26
+  ip   : 128.237.207.189
   port : 14255
 - name : charlie
-  ip   : 127.0.0.1
+  ip   : 128.237.212.71
   port : 12355
+- name : lisa
+  ip   : 128.237.212.71
+  port : 12644
 
 sendRules :
-  - action : delay 
-    src    : alice
-    dest   : bob
-    kind   : Lookup
-  - action : duplicate
-    src    : charlie
-    dest   : bob
-    kind   : Ack
   - action : drop 
-    src    : bob
-    dest   : alice
-    kind   : Ack
-    seqNum : 4
-  - action : duplicate
-    src    : bob
-    dest   : alice
-    kind   : Lookup
-  - action : duplicate
-    src    : charlie
-    dest   : bob
-    kind   : Lookup
-  - action : delay
     src    : alice
-    dest   : charlie
+    dest   : bob
+    kind   : Ack
+  # - action : duplicate
+  #   src    : charlie
+  #   dest   : bob
+  #   kind   : Ack
+  # - action : drop 
+  #   src    : bob
+  #   dest   : alice
+  #   kind   : Ack
+  #   seqNum : 4
+  # - action : duplicate
+  #   src    : bob
+  #   dest   : alice
+  #   kind   : Lookup
+  # - action : duplicate
+  #   src    : charlie
+  #   dest   : bob
+  #   kind   : Lookup
+  # - action : delay
+  #   src    : alice
+  #   dest   : charlie
     
 receiveRules :
-  - action : duplicate      
-    src    : charlie       
-    dest   : bob
-    kind   : Ack
-  - action : delay
-    src    : charlie
-    dest   : bob
-    kind   : Lookup
-  - action : drop
-    src    : bob
-    dest   : alice
-    kind   : Lookup
-  - action : drop
-    src    : alice
-    dest   : charlie
-    kind   : Ack
+  # - action : drop      
+  #   src    : charlie       
+  #   dest   : bob
+  #   kind   : Ack
+  #   duplicate : false 
+  # - action : delay
+  #   src    : charlie
+  #   dest   : bob
+  #   kind   : Lookup
+  # - action : drop
+  #   src    : bob
+  #   dest   : alice
+  #   kind   : Lookup
+  # - action : drop
+  #   src    : alice
+  #   dest   : charlie
+  #   kind   : Ack
 
