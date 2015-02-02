@@ -13,6 +13,14 @@ configuration :
   port : 12644
 
 sendRules :
+  - action : duplicate      
+    src    : alice       
+    dest   : bob
+    kind   : aa
+receiveRules :
+  - action : delay      
+    src    : alice       
+    dest   : bob
   - action : drop 
     src    : alice
     dest   : bob
