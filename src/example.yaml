@@ -1,15 +1,15 @@
 configuration :
 - name : alice
-  ip   : 128.237.207.189
+  ip   : 127.0.0.1
   port : 12344
 - name : bob
-  ip   : 128.237.207.189
+  ip   : 127.0.0.1
   port : 14255
 - name : charlie
-  ip   : 128.237.212.71
+  ip   : 127.0.0.1
   port : 12355
 - name : lisa
-  ip   : 128.237.212.71
+  ip   : 127.0.0.1
   port : 12644
 
 sendRules :
