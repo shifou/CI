@@ -153,6 +153,16 @@ public class configFileParse {
 						}
 					}
 					
+					if(itemExist("duplicate",t))
+					{
+						if(((boolean)t.get("duplicate")) && sendMsg.duplicate)
+						{
+							targetRule = (targetRule && true);
+						}else{
+							continue;
+						}
+					}
+
 					if(targetRule == true)
 					{
 						return ((String)t.get("action"));
@@ -206,6 +216,17 @@ public class configFileParse {
 							continue;
 						}
 					}
+					
+						if(itemExist("duplicate",t))
+						{
+							if(((boolean)t.get("duplicate")) == recvMsg.duplicate)
+							{
+								targetRule = (targetRule && true);
+							}else{
+								continue;
+							}
+					}
+
 					if(targetRule == true)
 					{
 						return ((String)t.get("action"));

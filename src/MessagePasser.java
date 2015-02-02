@@ -65,16 +65,17 @@ public class MessagePasser {
 		}
 		return ans;
 	}
-	private void reconfig() throws FileNotFoundException {
+	private boolean reconfig() throws FileNotFoundException {
 		// TODO Auto-generated method stub
 		if(last<=new File(filename).lastModified())
-			 return;
+			 return false;
+		last=new File(filename).lastModified();
 		config = new configFileParse(filename);
 		port = config.getPortbyName(username);
 		if(port==-1)
 		{
 			System.out.println("can not find the user info in config");
-			return;
+			return false;
 		}
 		nodes= config.getNetMap(username);
 		sockets.clear();
@@ -82,10 +83,11 @@ public class MessagePasser {
 		//System.out.println(nodes);
 		//sockets = getSocketMap(nodes);
 		//user = new User(username, port,messageRec);
+		return true;
 	}
 
 	void send(Message mes) throws FileNotFoundException {
-		reconfig();
+		System.out.println("reread: "+reconfig());
 		//System.out.println(mes.des);
 		if(this.nodes.containsKey(mes.des)==false)
 		{
@@ -156,7 +158,7 @@ public class MessagePasser {
 	}
 
 	Message receive() throws FileNotFoundException {
-		reconfig();
+		System.out.println("reread: "+reconfig());
 
 		receiveMessage();
 		if(!messages.isEmpty()){
