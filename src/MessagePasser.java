@@ -1,11 +1,13 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 
@@ -20,8 +22,8 @@ public class MessagePasser {
 	public long last;
 	public LinkedHashMap<String, nodeInfo> nodes = new LinkedHashMap<String, nodeInfo>();
 	public ConcurrentLinkedQueue<Message> messageRec = new ConcurrentLinkedQueue<Message>();
-	public HashMap<String, Socket> sockets = new HashMap<String, Socket>();
-	public HashMap<String, ObjectOutputStream> streams= new HashMap<String, ObjectOutputStream>();
+	public ConcurrentHashMap<String, Socket> sockets = new ConcurrentHashMap<String, Socket>();
+	public ConcurrentHashMap<String, ObjectOutputStream> streams= new ConcurrentHashMap<String, ObjectOutputStream>();
 	public ConcurrentLinkedQueue<Message> delaySend = new ConcurrentLinkedQueue<Message>();
 	public ConcurrentLinkedQueue<Message> delayRec = new ConcurrentLinkedQueue<Message>();
 	public ConcurrentLinkedQueue<Message> messages = new ConcurrentLinkedQueue<Message>();
@@ -40,7 +42,7 @@ public class MessagePasser {
 		}
 		nodes= config.getNetMap(username);
 		//sockets = getSocketMap(nodes);
-		user = new User(username, port,messageRec);
+		user = new User(username, port,messageRec,sockets, streams,nodes);
 		new Thread(user).start();
 	}
 	
@@ -93,7 +95,7 @@ public class MessagePasser {
 	}
 
 	void send(Message mes) throws FileNotFoundException {
-		System.out.println("reread: "+reconfig());
+		System.out.println("config changed: "+reconfig());
 		//System.out.println(mes.des);
 		if(this.nodes.containsKey(mes.des)==false)
 		{
@@ -133,8 +135,16 @@ public class MessagePasser {
 				System.out.println(hold.ip+"\t"+hold.port);
 				Socket sendd = new Socket(hold.ip, hold.port);
 				ObjectOutputStream out=new ObjectOutputStream(sendd.getOutputStream());
+				 ObjectInputStream objInput = new ObjectInputStream(sendd.getInputStream());
+		           
 				sockets.put(mes.des, sendd);
 				streams.put(mes.des, out);
+				 Connection handler;
+				 out.writeObject(username);
+				 //out.writeChars(this.username);
+	             handler = new Connection(sendd,out,objInput,messageRec);
+	             new Thread(handler).start();
+		         
 			} catch (UnknownHostException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

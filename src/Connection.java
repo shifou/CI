@@ -12,12 +12,12 @@ public class Connection implements Runnable {
 	private volatile boolean running;
 	private ObjectInputStream objInput;
 	private ObjectOutputStream objOutput;
-	public Connection(Socket slaveSocket, ConcurrentLinkedQueue mq) throws IOException {
+	public Connection(Socket slaveSocket, ObjectOutputStream out, ObjectInputStream objInput2, ConcurrentLinkedQueue mq) throws IOException {
 		// TODO Auto-generated constructor stub
 		socket = slaveSocket;
-		objOutput = new ObjectOutputStream(slaveSocket.getOutputStream());
+		objOutput = out;
 		objOutput.flush();
-		objInput = new ObjectInputStream(slaveSocket.getInputStream());
+		objInput = objInput2;
 		running=true;
 		messageQueue=mq;
 	}
