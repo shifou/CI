@@ -30,6 +30,7 @@ public class MessagePasser {
 		filename = configuration_filename;
 		File hold  = new File(filename);
 		last=hold.lastModified();
+		System.out.println("last: "+last);
 		username = local_name;
 		port = config.getPortbyName(username);
 		if(port==-1)
@@ -67,8 +68,13 @@ public class MessagePasser {
 	}
 	private boolean reconfig() throws FileNotFoundException {
 		// TODO Auto-generated method stub
-		if(last<=new File(filename).lastModified())
+		if(last>=new File(filename).lastModified())
+		{
+
+			System.out.println("last: "+new File(filename).lastModified());
 			 return false;
+		
+		}	 
 		last=new File(filename).lastModified();
 		config = new configFileParse(filename);
 		port = config.getPortbyName(username);
